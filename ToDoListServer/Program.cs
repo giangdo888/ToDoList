@@ -1,6 +1,10 @@
 
 using Microsoft.EntityFrameworkCore;
 using ToDoListServer.Data;
+using ToDoListServer.Interfaces.IRepositories;
+using ToDoListServer.Interfaces.IServices;
+using ToDoListServer.Repositories;
+using ToDoListServer.Services;
 
 namespace ToDoListServer
 {
@@ -19,6 +23,17 @@ namespace ToDoListServer
 
             builder.Services.AddDbContext<ToDoListDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            //configure logging
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConsole();
+            builder.Logging.AddDebug();
+
+            //inject repository
+            builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+
+            //inject service
+            builder.Services.AddScoped<IProjectService, ProjectService>();
 
             var app = builder.Build();
 
