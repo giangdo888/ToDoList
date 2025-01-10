@@ -5,6 +5,7 @@ using ToDoListServer.Interfaces.IRepositories;
 using ToDoListServer.Interfaces.IServices;
 using ToDoListServer.Repositories;
 using ToDoListServer.Services;
+using ToDoListServer.Utilities.Middleware;
 
 namespace ToDoListServer
 {
@@ -50,6 +51,9 @@ namespace ToDoListServer
 
 
             app.MapControllers();
+
+            //Register the exception-handling middleware
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.Run();
         }

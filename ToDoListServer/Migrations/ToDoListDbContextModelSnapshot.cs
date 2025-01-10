@@ -36,7 +36,7 @@ namespace ToDoListServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Priorities");
+                    b.ToTable("Priorities", (string)null);
 
                     b.HasData(
                         new
@@ -78,7 +78,7 @@ namespace ToDoListServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Projects");
+                    b.ToTable("Projects", (string)null);
 
                     b.HasData(
                         new
@@ -114,7 +114,7 @@ namespace ToDoListServer.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("States");
+                    b.ToTable("States", (string)null);
 
                     b.HasData(
                         new
@@ -171,7 +171,7 @@ namespace ToDoListServer.Migrations
 
                     b.HasIndex("StateId");
 
-                    b.ToTable("ToDoItems");
+                    b.ToTable("ToDoItems", (string)null);
 
                     b.HasData(
                         new

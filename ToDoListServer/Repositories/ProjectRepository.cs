@@ -8,24 +8,53 @@ namespace ToDoListServer.Repositories
     public class ProjectRepository : IProjectRepository
     {
         private readonly ToDoListDbContext _dbContext;
-        private readonly ILogger<ProjectRepository> _logger;
-        public ProjectRepository(ToDoListDbContext dbContext, ILogger<ProjectRepository> logger)
+        public ProjectRepository(ToDoListDbContext dbContext)
         {
             _dbContext = dbContext;
-            _logger = logger;
         }
 
         public async Task<IEnumerable<Project>> GetAllProjectsAsync()
         {
-            try
+            return await _dbContext.Projects.ToListAsync();
+        }
+
+        public async Task<Project?> GetProjectByIdAsync(int id)
+        {
+            return await _dbContext.Projects.FirstOrDefaultAsync(p => p.Id == id);
+        }
+
+        public async Task<Project> CreateProjectAsync(Project project)
+        {
+            await _dbContext.Projects.AddAsync(project);
+            await _dbContext.SaveChangesAsync();
+            return project;
+        }
+
+        public async Task<Project> UpdateProjectAsync(Project project)
+        {
+            var existingProject = await _dbContext.Projects.FirstOrDefaultAsync(p => p.Id == project.Id);
+            if (existingProject == null)
             {
-                return await _dbContext.Projects.ToListAsync();
+                throw new InvalidOperationException($"Not found project with id {project.Id}");
             }
-            catch (Exception ex)
+
+            existingProject.Name = project.Name;
+            await _dbContext.SaveChangesAsync();
+
+            return existingProject;
+        }
+
+        public async Task<bool> DeleteProjectAsync(int id)
+        {
+            var existingProject = await _dbContext.Projects.FirstOrDefaultAsync(p => p.Id == id);
+            if (existingProject == null)
             {
-                _logger.LogError(ex, "Repository: Error fetching all projects: {msg}", ex.Message);
-                throw;
+                throw new InvalidOperationException($"Not found project with id {id}");
             }
+
+            _dbContext.Projects.Remove(existingProject);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
     }
 }
