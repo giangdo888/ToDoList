@@ -44,7 +44,7 @@ namespace ToDoListServer.Repositories
             return existingProject;
         }
 
-        public async Task<bool> DeleteProjectAsync(int id)
+        public async Task DeleteProjectAsync(int id)
         {
             var existingProject = await _dbContext.Projects.FirstOrDefaultAsync(p => p.Id == id);
             if (existingProject == null)
@@ -54,7 +54,6 @@ namespace ToDoListServer.Repositories
 
             _dbContext.Projects.Remove(existingProject);
             await _dbContext.SaveChangesAsync();
-            return true;
         }
     }
 }

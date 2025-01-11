@@ -9,6 +9,6 @@ namespace ToDoListServer.Interfaces.IRepositories
         public Task<Project?> GetProjectByIdAsync(int id);
         public Task<Project> CreateProjectAsync(Project project);
         public Task<Project> UpdateProjectAsync(Project project);
-        public Task<bool> DeleteProjectAsync(int id);
+        public Task DeleteProjectAsync(int id);
     }
 }

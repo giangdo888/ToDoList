@@ -25,10 +25,6 @@ namespace ToDoListServer.Services
         {
             _logger.LogInformation("Fetching project list");
             var projects = await _projectRepository.GetAllProjectsAsync();
-            if (!projects.Any())
-            {
-                return [];
-            }
 
             _logger.LogInformation("Successfully retrieved project list");
             return _mapper.Map<IEnumerable<ProjectDto>>(projects);
@@ -54,11 +50,6 @@ namespace ToDoListServer.Services
                 _logger.LogWarning("Missing input when creating new project");
                 throw new ArgumentNullException(nameof(projectDto));
             }
-            if (string.IsNullOrEmpty(projectDto.Name))
-            {
-                _logger.LogWarning("Missing Name when creating new project");
-                throw new ArgumentException("Name is required");
-            }
 
             _logger.LogInformation($"Creating new project {projectDto}");
             var project = _mapper.Map<Project>(projectDto);
@@ -72,18 +63,13 @@ namespace ToDoListServer.Services
         {
             if (projectDto == null)
             {
-                _logger.LogWarning("Missing input when updating new project");
+                _logger.LogWarning("Missing input when updating project");
                 throw new ArgumentNullException(nameof(projectDto));
             }
             if (!projectDto.Id.HasValue)
             {
-                _logger.LogWarning("Missing Id when updating new project");
+                _logger.LogWarning("Missing Id when updating project");
                 throw new ArgumentNullException("Id is required");
-            }
-            if (string.IsNullOrEmpty(projectDto.Name))
-            {
-                _logger.LogWarning("Missing Name when updating new project");
-                throw new ArgumentException("Name is required");
             }
 
             var project = _mapper.Map<Project>(projectDto);
@@ -93,9 +79,9 @@ namespace ToDoListServer.Services
             return _mapper.Map<ProjectDto>(response);
         }
 
-        public async Task<bool> DeleteProjectAsync(int id)
+        public async Task DeleteProjectAsync(int id)
         {
-            return await _projectRepository.DeleteProjectAsync(id);
+            await _projectRepository.DeleteProjectAsync(id);
         }
     }
 }

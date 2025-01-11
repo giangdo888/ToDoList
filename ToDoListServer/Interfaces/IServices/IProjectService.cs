@@ -8,6 +8,6 @@ namespace ToDoListServer.Interfaces.IServices
         public Task<ProjectDto?> GetProjectByIdAsync(int id);
         public Task<ProjectDto> CreateProjectAsync(ProjectDto? projectDto);
         public Task<ProjectDto> UpdateProjectAsync(ProjectDto projectDto);
-        public Task<bool> DeleteProjectAsync(int id);
+        public Task DeleteProjectAsync(int id);
     }
 }

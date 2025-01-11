@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure;
+using Microsoft.AspNetCore.Mvc;
 using ToDoListServer.Dtos;
 using ToDoListServer.Interfaces.IServices;
 
@@ -9,23 +10,19 @@ namespace ToDoListServer.Controllers
     public class ProjectController : ControllerBase
     {
         private readonly IProjectService _projectService;
-        private readonly ILogger<ProjectController> _logger;
+        private readonly IToDoItemService _toDoItemService;
 
-        public ProjectController(IProjectService projectService, ILogger<ProjectController> logger)
+        public ProjectController(IProjectService projectService, IToDoItemService toDoItemService)
         {
             _projectService = projectService;
-            _logger = logger;
+            _toDoItemService = toDoItemService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllProjectsController()
         {
-            var reponse = await _projectService.GetAllProjectsAsync();
-            if (!reponse.Any())
-            {
-                return Ok();
-            }
-            return Ok(reponse);
+            var response = await _projectService.GetAllProjectsAsync();
+            return Ok(response ?? Enumerable.Empty<ProjectDto>());
         }
 
         [HttpGet("{id}")]
@@ -38,6 +35,13 @@ namespace ToDoListServer.Controllers
             }
 
             return Ok(response);
+        }
+
+        [HttpGet("{id}/items")]
+        public async Task<IActionResult> GetToDoItemsByProjectIdAsync(int id)
+        {
+            var response = await _toDoItemService.GetToDoItemsByProjectIdAsync(id);
+            return Ok(response ?? Enumerable.Empty<ToDoItemDtos>());
         }
 
         [HttpPost]
@@ -59,7 +63,14 @@ namespace ToDoListServer.Controllers
         public async Task<IActionResult> DeleteProjectAsync(int id)
         {
             await _projectService.DeleteProjectAsync(id);
-            return Ok($"Delete project with id {id} succesfully");
+            return Ok($"Successfully deleted project with id {id}");
+        }
+
+        [HttpDelete("{id}/items/completed")]
+        public async Task<IActionResult> DeleteCompletedItemsAsync(int id)
+        {
+            await _toDoItemService.DeleteCompletedToDoItemsAsync(id);
+            return Ok($"Successfully deleted completed to do items from project with id {id}");
         }
     }
 }

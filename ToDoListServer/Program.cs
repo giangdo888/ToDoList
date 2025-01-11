@@ -32,9 +32,11 @@ namespace ToDoListServer
 
             //inject repository
             builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+            builder.Services.AddScoped<IToDoItemRepository, ToDoItemRepository>();
 
             //inject service
             builder.Services.AddScoped<IProjectService, ProjectService>();
+            builder.Services.AddScoped<IToDoItemService, ToDoItemService>();
 
             var app = builder.Build();
 

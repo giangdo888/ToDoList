@@ -11,7 +11,7 @@ namespace ToDoListServer.Models
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
         //navigation props
-        public ICollection<ToDoItem> ToDoItems { get; set; }
-        public ICollection<State> States { get; set; }
+        public List<ToDoItem> ToDoItems { get; set; }
+        public List<State> States { get; set; }
     }
 }

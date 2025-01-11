@@ -10,6 +10,6 @@ namespace ToDoListServer.Models
         public string Name { get; set; }
 
         //navigation props
-        public ICollection<ToDoItem> ToDoItems { get; set; }
+        public List<ToDoItem> ToDoItems { get; set; }
     }
 }
